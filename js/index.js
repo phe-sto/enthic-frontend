@@ -1,7 +1,9 @@
+// IMPORT SIMPLE DOM ID CREATOR BASED ON A HASH FUNCTION
+import companyPanel from "./company-panel.js";
 /* INITIALIZATION OF THE AUTOCOMPLETE FOR COMPANY INPUT USING PIXABAY VANILLA
 LIBRARY, NO DEPENDENCY. SOURCE FROM https://github.com/Pixabay/JavaScript-autoComplete */
 var xhr = new XMLHttpRequest();
-var autocomplete = new autoComplete({
+new autoComplete({
   selector: '#search-company',
   minChars: 1,
   source: function (term, response) {
@@ -12,37 +14,41 @@ var autocomplete = new autoComplete({
     xhr.responseType = "json";
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
-        var choices = [];
-        for (let [siren, denomination] of Object.entries(xhr.response)) {
+        let choices = [];
+        for (let [_, denomination] of Object.entries(xhr.response)) {
           choices.push(denomination);
         }
         response(choices);
       }
     };
-    var data = JSON.stringify({ "probe": term, "limit": 20 });
+    let data = JSON.stringify({ "probe": term, "limit": 20 });
     xhr.send(data);
   },
   // TRIGGERED WHEN A COMPANY IS SELECTED
-  onSelect: function (e, denomination, item) {
-    var year = document.getElementById("select-year").value;
+  onSelect: function (_, denomination) {
+    let year = document.getElementById("select-year").value;
     document.title = denomination;
     document.getElementById("panel-company").style.display = "";
     getCompanyDetails(denomination, year);
   }
 });
 function createListElement(key, value) {
+  let panel;
   if (['GOOD'].includes(value)) {
-    return createListClass("success", key, value)
+    panel = new companyPanel("success", key, value)
   }
   else if (['TIGHT'].includes(value)) {
-    return createListClass("danger", key, value)
+    panel = new companyPanel("danger", key, value)
   }
   else {
-    return createListClass("info", key, value)
+    panel = new companyPanel("info", key, value)
   }
+  return panel.html
 }
 function createListClass(alertType, key, value) {
-  return '<li class="list-group-item">' + key + ': <div class="alert alert-' + alertType + '">' + value.toLocaleString("fr-FR") + '</div></li>'
+  let uniqueId = new domId(key)
+  return '<div class = "panel panel-default"><div class = "panel-heading" data-toggle = "collapse" href = "#' + uniqueId.id + '" style="cursor:pointer;"><h4 class = "panel-title"><a data-toggle="collapse" href="#' + uniqueId.id + '">' + key + '</a></h4></div>'
+    + '<div id="' + uniqueId.id + '" class="panel-collapse collapse"><div class="alert alert-' + alertType + '">' + value.toLocaleString("fr-FR") + '</div></div></div>'
 }
 function getCompanyDetails(denomination, year) {
   // CHANGE THE PANEL HEADER
@@ -58,7 +64,7 @@ function getCompanyDetails(denomination, year) {
   xhr.responseType = "json";
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
-      var list = "";
+      let list = "";
       for (let [key, value] of Object.entries(xhr.response)) {
         if (typeof value === 'object') {
           list += createListElement(value["description"], value["value"])
@@ -74,8 +80,8 @@ function getCompanyDetails(denomination, year) {
 };
 document.getElementById("select-year").addEventListener("change", checkCompany)
 function checkCompany() {
-  var companyDenomination = document.getElementById("search-company").value
-  var year = document.getElementById("select-year").value
+  let companyDenomination = document.getElementById("search-company").value
+  let year = document.getElementById("select-year").value
   if (companyDenomination != "") {
     getCompanyDetails(companyDenomination, year)
   }
