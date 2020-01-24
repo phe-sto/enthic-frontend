@@ -1,7 +1,13 @@
-// IMPORT SIMPLE DOM ID CREATOR BASED ON A HASH FUNCTION
+/*******************************************************************************
+ * IMPORT COMPANY PANEL FORMATER AND UMAN READABLE KEY
+ */
 import companyPanel from "./company-panel.js";
-/* INITIALIZATION OF THE AUTOCOMPLETE FOR COMPANY INPUT USING PIXABAY VANILLA
-LIBRARY, NO DEPENDENCY. SOURCE FROM https://github.com/Pixabay/JavaScript-autoComplete */
+import humanKey from "./translator.js"
+/*******************************************************************************
+ * INITIALIZATION OF THE AUTOCOMPLETE FOR COMPANY INPUT USING PIXABAY VANILLA
+ * LIBRARY, NO DEPENDENCY. SOURCE FROM
+ * https://github.com/Pixabay/JavaScript-autoComplete
+ */
 var xhr = new XMLHttpRequest();
 new autoComplete({
   selector: '#search-company',
@@ -32,7 +38,21 @@ new autoComplete({
     getCompanyDetails(denomination, year);
   }
 });
+/*******************************************************************************
+ * Summary. Create Boostrap panel for each company data.
+ *
+ * Description. Create Boostrap panel for each company data with
+ * the appropriate Boostrap alert.
+ *
+ * @param {type}    key     Key from the company data.
+ * @param {String}  value   Value from the company data.
+ * 
+ * @return {String} HTML from the companyPanel instance.
+ */
 function createListElement(key, value) {
+  if (key in humanKey.humanKey) {
+    key = humanKey.humanKey[key]
+  }
   let panel;
   if (['GOOD'].includes(value)) {
     panel = new companyPanel("success", key, value)
@@ -45,11 +65,17 @@ function createListElement(key, value) {
   }
   return panel.html
 }
-function createListClass(alertType, key, value) {
-  let uniqueId = new domId(key)
-  return '<div class = "panel panel-default"><div class = "panel-heading" data-toggle = "collapse" href = "#' + uniqueId.id + '" style="cursor:pointer;"><h4 class = "panel-title"><a data-toggle="collapse" href="#' + uniqueId.id + '">' + key + '</a></h4></div>'
-    + '<div id="' + uniqueId.id + '" class="panel-collapse collapse"><div class="alert alert-' + alertType + '">' + value.toLocaleString("fr-FR") + '</div></div></div>'
-}
+/*******************************************************************************
+ * Summary. GET company details from
+ * https://api.enthic.fr/company/denomination/.
+ *
+ * Description. GET company details from
+ * https://api.enthic.fr/company/denomination/. Call createListElement with the
+ * value return to create DOM.
+ *
+ * @param {type}    denomination Official registered company name.
+ * @param {String}  year         Year as a 4 character string, i.e. YYYY.
+ */
 function getCompanyDetails(denomination, year) {
   // CHANGE THE PANEL HEADER
   if (year === "") {
@@ -78,11 +104,11 @@ function getCompanyDetails(denomination, year) {
   };
   xhr.send();
 };
-document.getElementById("select-year").addEventListener("change", checkCompany)
-function checkCompany() {
-  let companyDenomination = document.getElementById("search-company").value
-  let year = document.getElementById("select-year").value
-  if (companyDenomination != "") {
-    getCompanyDetails(companyDenomination, year)
-  }
-}
+/*******************************************************************************
+ * EVENT FIRED WHEN CHANGED THE YEAR OR SELECTING AVERAGE DATA
+ */
+document.getElementById("select-year").addEventListener("change", function () {
+  // CALL getCompanyDetails WHEN YEAR OR AVERAGE CHANGES
+  getCompanyDetails(document.getElementById("search-company").value,
+    document.getElementById("select-year").value)
+})
