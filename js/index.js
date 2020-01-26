@@ -1,8 +1,11 @@
 /*******************************************************************************
- * IMPORT COMPANY PANEL FORMATER AND UMAN READABLE KEY
+ * EVENT FIRED WHEN CHANGED THE YEAR OR SELECTING AVERAGE DATA
  */
-import companyPanel from "./company-panel.js";
-import humanKey from "./translator.js"
+document.getElementById("select-year").addEventListener("change", function () {
+  // CALL getCompanyDetails WHEN YEAR OR AVERAGE CHANGES
+  getCompanyDetails(document.getElementById("search-company").value,
+    document.getElementById("select-year").value);
+});
 /*******************************************************************************
  * INITIALIZATION OF THE AUTOCOMPLETE FOR COMPANY INPUT USING PIXABAY VANILLA
  * LIBRARY, NO DEPENDENCY. SOURCE FROM
@@ -50,20 +53,17 @@ new autoComplete({
  * @return {String} HTML from the companyPanel instance.
  */
 function createListElement(key, value) {
-  if (key in humanKey.humanKey) {
-    key = humanKey.humanKey[key]
-  }
   let panel;
   if (['GOOD'].includes(value)) {
-    panel = new companyPanel("success", key, value)
+    panel = companyPanel("success", key, value);
   }
   else if (['TIGHT'].includes(value)) {
-    panel = new companyPanel("danger", key, value)
+    panel = companyPanel("danger", key, value);
   }
   else {
-    panel = new companyPanel("info", key, value)
+    panel = companyPanel("info", key, value);
   }
-  return panel.html
+  return panel;
 }
 /*******************************************************************************
  * Summary. GET company details from
@@ -90,25 +90,74 @@ function getCompanyDetails(denomination, year) {
   xhr.responseType = "json";
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
-      let list = "";
-      for (let [key, value] of Object.entries(xhr.response)) {
+      let panels = "";
+      for (let [_, value] of Object.entries(xhr.response)) {
         if (typeof value === 'object') {
-          list += createListElement(value["description"], value["value"])
+          panels += createListElement(value["description"], value["value"]);
         }
         else {
-          list += createListElement(key, value)
+          panels += createListElement(value["description"], value["value"]);
         }
       }
-      document.getElementById("list-company").innerHTML = list;
+      document.getElementById("list-company").innerHTML = panels;
     }
   };
   xhr.send();
 };
 /*******************************************************************************
- * EVENT FIRED WHEN CHANGED THE YEAR OR SELECTING AVERAGE DATA
+ * Summary. Generate a Boostrap pannel HTML DOM for a company.
+ *
+ * Description. The company panel contains details about the company. It
+ * uses the bootstrap library to be collapsable and save space. Value are
+ * financial amount and to be converted to French local for thousand
+ * separation. Inherite from String because HTML is one.
+ *
+ * @param {String}          alertType Type of Bootstrap alert
+ * @param {String}          key Key from company details
+ * @param {String, Number}  value Value from company details
+ *
+ * @return {Object} Object containing the DOM HTML as value.
  */
-document.getElementById("select-year").addEventListener("change", function () {
-  // CALL getCompanyDetails WHEN YEAR OR AVERAGE CHANGES
-  getCompanyDetails(document.getElementById("search-company").value,
-    document.getElementById("select-year").value)
-})
+function companyPanel(alertType, key, value) {
+  let uniqueId = new domId(key)
+  return `<div class = "panel panel-default">
+                <div class = "panel-heading" data-toggle="collapse" href = "#${uniqueId.id}" style="cursor:pointer;">
+                    <h4 class = "panel-title">
+                        <a data-toggle="collapse" href="#${uniqueId.id}">${key}</a>
+                    </h4>
+                </div>
+                <div id="${uniqueId.id}" class="panel-collapse collapse">
+                    <div class="alert alert-${alertType}">${value.toLocaleString("fr-FR")}</div>
+                </div>
+            </div>`;
+};
+/*******************************************************************************
+ * CLASS domId
+ */
+class domId extends String {
+  /***************************************************************************
+   * Summary. Generate an DOM id based on a String
+   *
+   * Description. Uses hash function to create a valid most likely unique id
+   * from any String. Epoch time is ms * random [0,1[ string is concatenate to
+   * the former string. Inherite from String because id attribute is one.
+   *
+   * @param {String}  s   String to hash.
+   *
+   * @return {Object}     Object containing the DOM id as value.
+   */
+  constructor(s) {
+    let hash = 0;
+    var d = new Date();
+    var n = d.getTime();
+    //ADD TIME AND RANDOM FOR BETTER CHANCES TO HAVE A UNIQUE ID
+    s = s + String(n * Math.random())
+    for (let i = 0; i < s.length; i++) {
+      let character = s.charCodeAt(i);
+      hash = ((hash << 5) - hash) + character;
+      hash = hash & hash; // CONVERT TO 32BIT INTEGER
+    }
+    super(hash);
+    return { "id": String(this) };
+  }
+}
