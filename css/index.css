@@ -1,6 +1,8 @@
 html,body {
   height:100%;
+  background-color: #f1f2f6;
 }
+
 .autocomplete-suggestions {
     text-align: left;
     cursor: default;

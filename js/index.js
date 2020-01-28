@@ -35,6 +35,7 @@ new autoComplete({
   },
   // TRIGGERED WHEN A COMPANY IS SELECTED
   onSelect: function (_, denomination) {
+    $(".alert").alert('close'); // TODO Replace ugly JQuery
     let year = document.getElementById("select-year").value;
     document.title = denomination;
     document.getElementById("panel-company").style.display = "";
@@ -92,12 +93,8 @@ function getCompanyDetails(denomination, year) {
     if (xhr.readyState === 4 && xhr.status === 200) {
       let panels = "";
       for (let [_, value] of Object.entries(xhr.response)) {
-        if (typeof value === 'object') {
-          panels += createListElement(value["description"], value["value"]);
-        }
-        else {
-          panels += createListElement(value["description"], value["value"]);
-        }
+        panels += createListElement(value["description"], value["value"]);
+
       }
       document.getElementById("list-company").innerHTML = panels;
     }
