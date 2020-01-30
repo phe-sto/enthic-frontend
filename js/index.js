@@ -3,7 +3,7 @@
  */
 document.getElementById("select-year").addEventListener("change", function () {
   // CALL getCompanyDetails WHEN YEAR OR AVERAGE CHANGES
-  getCompanyDetails(document.getElementById("search-company").value,
+  getCompanyDetails(document.getElementById("search-company").value.split(", ")[1],
     document.getElementById("select-year").value);
 });
 /*******************************************************************************
@@ -24,19 +24,20 @@ new autoComplete({
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         let choices = [];
-        for (let [_, denomination] of Object.entries(xhr.response)) {
-          choices.push(denomination);
+        for (let [siren, denomination] of Object.entries(xhr.response)) {
+          choices.push(siren + ", " + denomination); // VIEW SIREN AND DENOMINATION
         }
         response(choices);
       }
     };
-    let data = JSON.stringify({ "probe": term, "limit": 20 });
+    let data = JSON.stringify({ "probe": term, "limit": 100 });
     xhr.send(data);
   },
   // TRIGGERED WHEN A COMPANY IS SELECTED
-  onSelect: function (_, denomination) {
+  onSelect: function (_, sirenDenomination) {
     $(".alert").alert('close'); // TODO Replace ugly JQuery
     let year = document.getElementById("select-year").value;
+    let denomination = sirenDenomination.split(", ")[1];
     document.title = denomination;
     document.getElementById("panel-company").style.display = "";
     getCompanyDetails(denomination, year);
@@ -50,7 +51,7 @@ new autoComplete({
  *
  * @param {type}    key     Key from the company data.
  * @param {String}  value   Value from the company data.
- * 
+ *
  * @return {String} HTML from the companyPanel instance.
  */
 function createListElement(key, value) {
@@ -100,7 +101,7 @@ function getCompanyDetails(denomination, year) {
     }
   };
   xhr.send();
-};
+}
 /*******************************************************************************
  * Summary. Generate a Boostrap pannel HTML DOM for a company.
  *
@@ -118,16 +119,16 @@ function getCompanyDetails(denomination, year) {
 function companyPanel(alertType, key, value) {
   let uniqueId = new domId(key)
   return `<div class = "panel panel-default">
-                <div class = "panel-heading" data-toggle="collapse" href = "#${uniqueId.id}" style="cursor:pointer;">
-                    <h4 class = "panel-title">
-                        <a data-toggle="collapse" href="#${uniqueId.id}">${key}</a>
-                    </h4>
-                </div>
-                <div id="${uniqueId.id}" class="panel-collapse collapse">
-                    <div class="alert alert-${alertType}">${value.toLocaleString("fr-FR")}</div>
-                </div>
-            </div>`;
-};
+              <div class = "panel-heading" data-toggle="collapse" href = "#${uniqueId.id}" style="cursor:pointer;">
+                  <h4 class = "panel-title">
+                      <a data-toggle="collapse" href="#${uniqueId.id}">${key}</a>
+                  </h4>
+              </div>
+              <div id="${uniqueId.id}" class="panel-collapse collapse">
+                  <div class="alert alert-${alertType}">${value.toLocaleString("fr-FR")}</div>
+              </div>
+          </div>`;
+}
 /*******************************************************************************
  * CLASS domId
  */

@@ -1,8 +1,9 @@
 <IfModule mod_headers.c>
     Header set Access-Control-Allow-Origin "*"
-</IfModule>
 RewriteEngine On
-RewriteCond %{SERVER_PORT} 80
-RewriteRule ^(.*)$ https://www.enthic.fr/$1 [R,L]
-
+RewriteCond %{HTTP_HOST} ^enthic.fr [NC]
+RewriteRule ^(.*)$ https://www.%{HTTP_HOST}%{REQUEST_URI}  [L,R=301]
+RewriteCond %{HTTP_HOST} ^www.enthic.fr [NC]
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI}  [L,R=301]
 Errordocument 404 /404.html
