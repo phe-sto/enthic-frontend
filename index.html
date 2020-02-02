@@ -13,15 +13,17 @@
     <!-- Description -->
     <meta name="author" content="PapIT" />
     <meta name="copyright" content="Enthic" />
-    <meta name="description" content="Portail des données financières des entreprises Françaises" />
+    <meta name="description"
+        content="Portail des données financières des entreprises Françaises, synthèse issue des bilan comtpables" />
     <meta name="keywords"
         content="Entreprise, éthique, Tech for good, impôt, redistribution, chiffre d'affaire, salaire, participation, effectif" />
     <!-- SEO -->
     <meta property="og:title" content="Portail de l'éthique des entreprises" />
     <meta property="og:type" content="siteweb" />
-    <meta property="og:image" content="favicon.ico" />
+    <meta property="og:image" content="https://www.enthic.fr/favicon.ico" />
     <meta property="og:url" content="https://www.enthic.fr/" />
-    <propriete meta="og:description" content="Portail des données financières des entreprises Françaises" />
+    <meta property="og:description"
+        content="Portail des données financières des entreprises Françaises, synthèse issue des bilan comtpables" />
     <!-- JQuery and Bootstrap libraries and home JS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css">
@@ -29,6 +31,24 @@
     <script src="js/bootstrap.min.js"></script>
     <!-- Title -->
     <title>Enthic, données financières des entreprises</title>
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+		{
+			"@context": "http://schema.org/",
+			"@type": "Organization",
+			"url": "https://www.enthic.fr/",
+			"description": "Portail des données financières des entreprises Françaises",
+			"image": "https://www.enthic.fr/favicon.ico",
+			"name": "Enthic",
+			"sameAs": ["https://api.enthic.fr/"],
+			"contactPoint": {
+              "@type": "ContactPoint",
+              "telephone": "+33604413615",
+			  "email": "services@papit.fr",
+			  "contactType": "Customer service"
+			}
+		  }
+	</script>
 </head>
 
 <body>
