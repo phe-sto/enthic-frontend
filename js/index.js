@@ -80,7 +80,7 @@ function createListElement(key, value) {
  */
 function getCompanyDetails(denomination, year) {
   // CHANGE THE PANEL HEADER
-  if (year === "") {
+  if (year === "average") {
     document.getElementById("panel-company-name").innerText = denomination + " en moyenne";
   }
   else {
@@ -93,9 +93,15 @@ function getCompanyDetails(denomination, year) {
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
       let panels = "";
-      for (let [_, value] of Object.entries(xhr.response)) {
-        panels += createListElement(value["description"], value["value"]);
+      for (let [key, value] of Object.entries(xhr.response)) {
 
+        if (year === key) { // IF IN THE DESIRED BUNDLE
+          for (let [_, bundle] of Object.entries(value)) {
+            panels += createListElement(bundle["description"], bundle["value"]);
+          }
+        } else { // OUT OF A BUNDLE
+          panels += createListElement(value["description"], value["value"]);
+        }
       }
       document.getElementById("list-company").innerHTML = panels;
     }
