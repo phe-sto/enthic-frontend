@@ -18,14 +18,16 @@ new autoComplete({
   source: function (term, response) {
     term = term.toUpperCase();
     // HTTP POST REQUEST TO api.enthic WITH THE INPUT VALUE
-    xhr.open("POST", "https://api.enthic.fr/company/search/", true);
+    xhr.open("POST", "http://api.enthic.fr/company/search/", true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.responseType = "json";
     xhr.onreadystatechange = function () {
       if (xhr.readyState === 4 && xhr.status === 200) {
         let choices = [];
-        for (let [siren, denomination] of Object.entries(xhr.response)) {
-          choices.push(siren + ", " + denomination); // VIEW SIREN AND DENOMINATION
+        let i = 0
+        while (i < xhr.response.totalItems) {
+          choices.push(xhr.response.member[i].siren.value + ", " + xhr.response.member[i].denomination.value)
+          i++
         }
         response(choices);
       }
@@ -54,25 +56,28 @@ new autoComplete({
  *
  * @return {String} HTML from the companyPanel instance.
  */
-function createListElement(key, value) {
+function createListElement(key, value, classification = "UNKNOWN") {
   let panel;
-  if (['GOOD'].includes(value)) {
+  if (classification === "GOOD") {
     panel = companyPanel("success", key, value);
   }
-  else if (['TIGHT'].includes(value)) {
+  else if (classification === 'TIGHT') {
     panel = companyPanel("danger", key, value);
   }
-  else {
+  else if (classification === "AVERAGE") {
     panel = companyPanel("info", key, value);
+  }
+  else {
+    panel = companyPanel("warning", key, value);
   }
   return panel;
 }
 /*******************************************************************************
  * Summary. GET company details from
- * https://api.enthic.fr/company/denomination/.
+ * http://api.enthic.fr/company/denomination/.
  *
  * Description. GET company details from
- * https://api.enthic.fr/company/denomination/. Call createListElement with the
+ * http://api.enthic.fr/company/denomination/. Call createListElement with the
  * value return to create DOM.
  *
  * @param {type}    denomination Official registered company name.
@@ -87,24 +92,33 @@ function getCompanyDetails(denomination, year) {
     document.getElementById("panel-company-name").innerText = denomination + " en " + year;
   }
   // HTTP POST REQUEST TO api.enthic WITH THE INPUT VALUE
-  xhr.open("GET", "https://api.enthic.fr/company/denomination/" + denomination + "/" + year, true);
+  xhr.open("GET", "http://api.enthic.fr/company/denomination/" + denomination + "/" + year, true);
   xhr.setRequestHeader("Content-Type", "application/json");
   xhr.responseType = "json";
   xhr.onreadystatechange = function () {
+    let panels = "";
     if (xhr.readyState === 4 && xhr.status === 200) {
-      let panels = "";
       for (let [key, value] of Object.entries(xhr.response)) {
 
-        if (year === key) { // IF IN THE DESIRED BUNDLE
-          for (let [_, bundle] of Object.entries(value)) {
-            panels += createListElement(bundle["description"], bundle["value"]);
+        if ("financial_data" === key) { // IF IN THE DESIRED BUNDLE
+          let l = value.length;
+          while (l--) {
+            for (let [code, bundle] of Object.entries(value[l])) {
+              let bundle_description = `${bundle["description"]} (${code} du ${bundle["account"]})`
+              if (bundle.hasOwnProperty('classification')) {
+                panels += createListElement(bundle_description, bundle["value"], bundle['classification']["value"]);
+              } else {
+                panels += createListElement(bundle_description, bundle["value"]);
+              }
+
+            }
           }
-        } else { // OUT OF A BUNDLE
+        } else { // IN IDENTITY
           panels += createListElement(value["description"], value["value"]);
         }
       }
-      document.getElementById("list-company").innerHTML = panels;
     }
+    document.getElementById("list-company").innerHTML = panels;
   };
   xhr.send();
 }
