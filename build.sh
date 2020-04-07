@@ -16,11 +16,14 @@ cp -r ./ ../build
 # JAVASCRIPT WITH CLOSURE JS
 ################################################################################
 # COPY JS FILES AS TEMP FILES
-cp js/index.js .
+cp js/entreprise.js .
+cp js/mail.js .
 # JS CLOSURE COMPILER
-java -jar closure-compiler-v20190909.jar -O SIMPLE --js_output_file=../build/js/index.js --js=index.js --language_out=ECMASCRIPT_2015
+java -jar closure-compiler-v20190909.jar -O SIMPLE --js_output_file=../build/js/entreprise.js --js=entreprise.js --language_out=ECMASCRIPT_2015
+java -jar closure-compiler-v20190909.jar -O SIMPLE --js_output_file=../build/js/mail.js --js=mail.js --language_out=ECMASCRIPT_2015
 # REMOVE JS TEMP FILES
-rm index.js
+rm entreprise.js
+rm mail.js
 ################################################################################
 # CSS WITH POSTCSS AND CSS NANO
 ################################################################################

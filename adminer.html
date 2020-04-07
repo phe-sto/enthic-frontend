@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <!-- For mobiles as well -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Canonical link -->
+    <link rel="canonical" href="https://www.enthic.fr/"/>
+    <!-- HTTP -->
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="content-language" content="fr-FR"/>
+    <!-- Description -->
+    <meta name="author" content="PapIT"/>
+    <meta name="copyright" content="Enthic"/>
+    <meta name="description"
+          content="Page non trouvée sur le portail des données financières des entreprises Françaises"/>
+    <meta name="keywords"
+          content="Entreprise, éthique, Tech for good, impôt, redistribution, chiffre d'affaire, salaire, participation, effectif"/>
+    <!-- SEO -->
+    <meta property="og:title" content="Portail de l'éthique des entreprises"/>
+    <meta property="og:type" content="siteweb"/>
+    <meta property="og:image" content="https://www.enthic.fr/favicon.ico"/>
+    <meta property="og:url" content="https://www.enthic.fr/"/>
+    <meta property="og:description"
+          content="Page non trouvée sur le portail des données financières des entreprises Françaises"/>
+    <!-- JQuery and Bootstrap libraries and home JS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/index.css">
+    <!-- Title -->
+    <title>Base</title>
+</head>
+
+<body>
+<nav class="navbar navbar-default" role="navigation"
+     style="background: linear-gradient(0.25turn, #fa983a, #f6b93b);">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <img class="pull-left" alt="Logo" title="Logo Enthic" height="45px"
+                 style="margin-left: 3px;margin-right: 3px;margin-top: 3px;" src="favicon.ico"/>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="/">Home</a></li>
+                <li><a href="entreprise.html">Entreprise</a></li>
+                <li class="active"><a href="adminer.html">Base de donnée</a></li>
+                <li><a href="api.html">API enthic</a></li>
+                <li><a href="papit.html">PapIT</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <h1>Base de donnée
+    </h1>
+</div>
+<div class="container">
+    <div class="jumbotron">
+        <p>La base de donnée peut ouvertement être explorée avec l'outil <a
+                href="https://adminer.enthic.fr/?server=localhost&username=read&db=enthic"
+                target="_blank">Adminer</a> et le mot
+            de passe <strong><i class="bg-danger">enthic</i></strong>.
+        </p>
+        <p>Adminer permet de:
+        <ul style="font-size: 150%;">
+            <li>Executer des requêtes SQL.</li>
+            <li>Faire une recherche via l'interface sans requête SQL.</li>
+            <li>Exporter les résulats des recherches ou requêtes au format SQL, CSV, TSV, zippé ou
+                non.
+            </li>
+            <li>Tout ce que permet un logiciel d'administration de base de donnée complet.</li>
+        </ul>
+        </p>
+        <p>
+            La base de données est constituée de 3 tables. La table <b>identity</b> stocke les
+            données
+            propres à l'identité de l'entrepise, le SIREN est donc l'identifiant unique. La table
+            <b>bundle</b> stocke les liasses fiscales par compte et par année de déclaration. Il y a
+            donc une relation
+            <i>one
+                to many</i> entre le SIREN de la table <b>identity</b> et le SIREN de la table <b>bundle</b>.
+            La base
+            <b>request</b> stocke les requêtes HTTP entrantes pour une analyse ultérieur.
+        <div style="overflow: auto;">
+            <img src="img/enthic-dbdiagram.png" style="width: inherit;" class="pull-left"
+                 alt="Enthic database diagram"
+                 title="Enthic database diagram"></img>
+        </div>
+        </p>
+        <p>
+            Les colonnes <b>ape</b>, <b>accountability</b> et <b>bundle</b> stockent respectivement
+            le code APE, le code correspondant au type de compte et le code de la liasse fiscale.
+            Ces codes ne sont pas explicitent et sont dans les déclarations le plus souvent des
+            chaînes de caractères. Par soucis d'efficacité de l'application, ils ont été remplacés
+            par des TINYINT.
+            La correspondance entre ces TINYINT, les codes des impôts, les codes APE et leur
+            description peut se faire à l'aide de deux points d'API. <a
+                href="http://api.enthic.fr/company/ontology"
+                target="_blank">
+            http://api.enthic.fr/company/ontology</a> pour les types de comptes, les liasses
+            fiscales et <a href="http://api.enthic.fr/company/ape" target="_blank">
+            http://api.enthic.fr/company/ape</a> pour les codes APE.
+        </p>
+        <p>
+            N'hésitez pas à nous écrire par le biais du <a href="https://www.enthic.fr/contact.html"
+                                                           target="_blank">formulaire de contact</a>
+            pour toute aide au requêtage en base.
+        </p>
+    </div>
+</div>
+</body>
+
+</html>
+<!DOCTYPE html>
