@@ -3,7 +3,6 @@
  * @return {boolean}   Boolean, true if form is okay, false on contrary.
  **/
 document.getElementById("send-message").addEventListener("click", function (event) {
-    event.stopPropagation() // Stop from posting the form
     // if the validator does not prevent form submit
 
     // Get the form and check for datas in it
