@@ -44,7 +44,7 @@ document.getElementById("send-message").addEventListener("click", function (even
         },
         success: function () {
             // inject the alert to .messages div in our form
-            $('#contact-form').find('.messages').html('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&#10062;</button>Votre message a pas été envoyé</div>');
+            $('#contact-form').find('.messages').html('<div class="alert alert-success alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&#10062;</button>Votre message a été envoyé</div>');
         },
         error: function () {
             $('#contact-form').find('.messages').html("<div class='alert alert-danger alert-dismissable'><button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&#10062;</button>Erreur serveur, votre message n'a pas été envoyé.</div>");
