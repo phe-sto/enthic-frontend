@@ -6,24 +6,23 @@
     <!-- For mobiles as well -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Canonical link -->
-    <link rel="canonical" href="https://www.enthic.fr/"/>
+    <link rel="canonical" href="https://www.enthic.fr/" />
     <!-- HTTP -->
-    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <meta http-equiv="content-language" content="fr-FR"/>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="content-language" content="fr-FR" />
     <!-- Description -->
-    <meta name="author" content="PapIT"/>
-    <meta name="copyright" content="Enthic"/>
-    <meta name="description"
-          content="Contacter Enthic, faites part de vous remarques et questions sur l'application"/>
+    <meta name="author" content="PapIT" />
+    <meta name="copyright" content="Enthic" />
+    <meta name="description" content="Contacter Enthic, faites part de vous remarques et questions sur l'application" />
     <meta name="keywords"
-          content="Entreprise, éthique, Tech for good, impôt, redistribution, chiffre d'affaires, salaire, participation, effectif"/>
+        content="Entreprise, éthique, Tech for good, impôt, redistribution, chiffre d'affaires, salaire, participation, effectif" />
     <!-- SEO -->
-    <meta property="og:title" content="Portail des données financières des entreprises Françaises"/>
-    <meta property="og:type" content="siteweb"/>
-    <meta property="og:image" content="https://www.enthic.fr/favicon.ico"/>
-    <meta property="og:url" content="https://www.enthic.fr/"/>
+    <meta property="og:title" content="Portail des données financières des entreprises Françaises" />
+    <meta property="og:type" content="siteweb" />
+    <meta property="og:image" content="https://www.enthic.fr/favicon.ico" />
+    <meta property="og:url" content="https://www.enthic.fr/" />
     <propriete meta="og:description"
-               content="Contacter Enthic, faites part de vous remarques et questions sur l'application"/>
+        content="Contacter Enthic, faites part de vous remarques et questions sur l'application" />
     <!-- JQuery and Bootstrap libraries and home JS -->
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/enthic.css">
@@ -34,133 +33,136 @@
 </head>
 
 <body>
-<nav class="navbar navbar-default" role="navigation"
-     style="background: linear-gradient(0.25turn, #fa983a, #f6b93b);">
+    <nav class="navbar navbar-default" role="navigation"
+        style="background: linear-gradient(0.25turn, #fa983a, #f6b93b);">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <img class="pull-left" alt="Logo" title="Logo Enthic" height="45px"
+                    style="margin-left: 3px;margin-right: 3px;margin-top: 3px;" src="favicon.ico" />
+            </div>
+            <div class="collapse navbar-collapse" id="navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="entreprise.html">Entreprise</a></li>
+                    <li><a href="adminer.html">base de données</a></li>
+                    <li><a href="api.html">API enthic</a></li>
+                    <li><a href="papit.html">PapIT</a></li>
+                    <li><a href="sponsor.html">Sponsors</a></li>
+                    <li class="active"><a href="contact.html">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
     <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse"
-                    data-target="#navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <img class="pull-left" alt="Logo" title="Logo Enthic" height="45px"
-                 style="margin-left: 3px;margin-right: 3px;margin-top: 3px;" src="favicon.ico"/>
-        </div>
-        <div class="collapse navbar-collapse" id="navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="/">Home</a></li>
-                <li><a href="entreprise.html">Entreprise</a></li>
-                <li><a href="adminer.html">base de données</a></li>
-                <li><a href="api.html">API enthic</a></li>
-                <li><a href="papit.html">PapIT</a></li>
-                <li><a href="sponsor.html">Sponsors</a></li>
-                <li class="active"><a href="contact.html">Contact</a></li>
-            </ul>
-        </div>
+        <h1>Restons en contact
+        </h1>
     </div>
-</nav>
+    <div class="container">
+        <div class="jumbotron">
+            <p>Pour toutes vos remarques et demandes à propos des données ou de l'application, support
+                quant au fonctionnement de l'<a href="http://api.enthic.fr" target="_blank">API</a>, ou de la connexion
+                à la
+                base par <a href="https://adminer.enthic.fr/?server=localhost&username=read&db=enthic">Adminer</a>
+                ou quelqu'autre requête, n'hésitez à nous contacter.
+            </p>
+            <form id="contact-form" role="form">
 
+                <div class="messages"></div>
 
-<div class="container">
-    <h1>Restons en contact
-    </h1>
-</div>
-<div class="container">
-    <div class="jumbotron">
-        <p>Pour toutes vos remarques et demandes à propos des données ou de l'application, support
-            quant au fonctionnement de l'<a
-                    href="http://api.enthic.fr" target="_blank">API</a>, ou de la connexion à la
-            base par <a
-                    href="https://adminer.enthic.fr/?server=localhost&username=read&db=enthic">Adminer</a>
-            ou quelqu'autre requête, n'hésitez à nous contacter.
-        </p>
-        <form id="contact-form" role="form">
+                <div class="controls">
 
-            <div class="messages"></div>
-
-            <div class="controls">
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="form-firstname">Prénom *</label>
-                            <input id="form-firstname" type="text" name="firstname"
-                                   class="form-control"
-                                   placeholder="Entrez votre prénom
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form-firstname">Prénom *</label>
+                                <input id="form-firstname" type="text" name="firstname" class="form-control"
+                                    placeholder="Entrez votre prénom
 *" required="required" data-error="Le prénom est requis.">
-                            <div class="help-block with-errors"></div>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="form-lastname">Nom *</label>
-                            <input id="form-lastname" type="text" name="lastname"
-                                   class="form-control" placeholder="Entrez votre nom
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form-lastname">Nom *</label>
+                                <input id="form-lastname" type="text" name="lastname" class="form-control" placeholder="Entrez votre nom
 *" required="required" data-error="Le nom est requis.">
-                            <div class="help-block with-errors"></div>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="form-email">Email *</label>
-                            <input id="form-email" type="email" name="email" class="form-control"
-                                   placeholder="Entrez votre email *
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form-email">Email *</label>
+                                <input id="form-email" type="email" name="email" class="form-control" placeholder="Entrez votre email *
 " required="required" data-error="Un email valide est requis.">
-                            <div class="help-block with-errors"></div>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="form-phone">Téléphone</label>
+                                <input id="form-phone" type="tel" name="phone" class="form-control"
+                                    placeholder="Entrez votre téléphone">
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label for="form-phone">Téléphone</label>
-                            <input id="form-phone" type="tel" name="phone" class="form-control"
-                                   placeholder="Entrez votre téléphone">
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-group">
-                            <label for="form-message">Message *</label>
-                            <textarea id="form-message" name="message" class="form-control"
-                                      placeholder="Votre message *" rows="4
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="form-message">Message *</label>
+                                <textarea id="form-message" name="message" class="form-control"
+                                    placeholder="Votre message *" rows="4
 " required="required" data-error="Laissez un message."></textarea>
-                            <div class="help-block with-errors"></div>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="text-muted small">
+                                <strong>*</strong> Champs requis</p>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="text-muted small">
-                            <strong>*</strong> Champs requis</p>
-                    </div>
+            </form>
+            <div>
+                <button type="button" class="btn btn-default btn-lg" id="send-message">Envoyer</button>
+            </div>
+        </div>
+        <p>
+            PapIT, SASU au capital social de 1000€, 592 route de Couvette, 74250 Fillinges, services@papit.fr,
+            +33604413615, Géré par Christophe Brun, site hébergé par OVHcloud.
+        </p>
+        <p>
+            Par respect de la sécurité de vos données, aucun système de tracking ou cookie ne stocke pas d'information
+            relative à votre navigation.
+        </p>
+    </div>
+    <!-- Waiting modal during mail sending -->
+    <div id="waiting-modal" class="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p>
+                        <img src="img/waiting-wheel.gif" alt="Wheel"
+                            style="vertical-align:middle;margin-right:15%" />Envoie
+                        du message en
+                        cours</p>
                 </div>
             </div>
-        </form>
-        <div>
-            <button type="button" class="btn btn-default btn-lg" id="send-message">Envoyer</button>
         </div>
     </div>
-</div>
-<!-- Waiting modal during mail sending -->
-<div id="waiting-modal" class="modal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-                <p>
-                    <img src="img/waiting-wheel.gif" alt="Wheel"
-                         style="vertical-align:middle;margin-right:15%"/>Envoie
-                    du message en
-                    cours</p>
-            </div>
-        </div>
-    </div>
-</div>
 </body>
 <script src="js/validator.min.js" type="text/javascript" defer></script>
 <script src="js/mail.js" type="text/javascript" defer></script>
