@@ -1,3 +1,4 @@
+'use strict';
 /*******************************************************************************
  * When the send button is clicked, check the form, show the modal request
  * @return {undefined}
