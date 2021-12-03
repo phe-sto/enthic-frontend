@@ -86,7 +86,7 @@
                             <label for="form-firstname">Prénom *</label>
                             <input id="form-firstname" type="text" name="firstname" class="form-control"
                                    placeholder="Entrez votre prénom
-*" required="required" data-error="Le prénom est requis.">
+*" data-error="Le prénom est requis." required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                         <div class="form-group">
                             <label for="form-lastname">Nom *</label>
                             <input id="form-lastname" type="text" name="lastname" class="form-control" placeholder="Entrez votre nom
-*" required="required" data-error="Le nom est requis.">
+*" data-error="Le nom est requis." required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                         <div class="form-group">
                             <label for="form-email">Email *</label>
                             <input id="form-email" type="email" name="email" class="form-control" placeholder="Entrez votre email *
-" required="required" data-error="Un email valide est requis.">
+" data-error="Un email valide est requis." required>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -112,7 +112,8 @@
                         <div class="form-group">
                             <label for="form-phone">Téléphone</label>
                             <input id="form-phone" type="tel" name="phone" class="form-control"
-                                   placeholder="Entrez votre téléphone">
+                                   placeholder="Entrez votre téléphone"
+                                   pattern="(\+|[0-9])[0-9]{7,}">
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -123,7 +124,7 @@
                             <label for="form-message">Message *</label>
                             <textarea id="form-message" name="message" class="form-control"
                                       placeholder="Votre message *" rows="4
-" required="required" data-error="Laissez un message."></textarea>
+" data-error="Laissez un message."></textarea>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -163,7 +164,6 @@
     </div>
 </div>
 </body>
-<script src="js/validator.min.js" type="text/javascript" defer></script>
 <script src="js/mail.js" type="text/javascript" defer></script>
 
 </html>
