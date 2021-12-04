@@ -1,3 +1,4 @@
+'use strict';
 /*******************************************************************************
  * Event fired when changed the year or selecting average data
  */
