@@ -106,7 +106,9 @@ new autoComplete({
         // ADD siren AND denomination ATTRIBUTES
         return `<div class="autocomplete-suggestion" data-val="${display_result}" data-siren="${item.siren.value}" data-denomination="${item.denomination.value}">${display_result.replace(re, "<b>$1</b>")}</div>`;
     },
-    // TRIGGERED WHEN A COMPANY IS SELECTED
+    /***************************************************************************
+     * Triggered when a company is selected
+     */
     onSelect(event, term, item) {
         document.title = item.dataset.denomination;
         const searchInput = document.getElementById("search-company");
