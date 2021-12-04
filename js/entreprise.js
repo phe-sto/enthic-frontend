@@ -35,7 +35,7 @@ new autoComplete({
     // HOW TO RENDER THE ITEM
     renderItem: function (item, search) {
         search = search.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-        var re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
+        let re = new RegExp("(" + search.split(' ').join('|') + ")", "gi");
         const display_result = item.siren.value + ", " + item.denomination.value
         // ADD siren AND denomination ATTRIBUTES
         return `<div class="autocomplete-suggestion" data-val="${display_result}" data-siren="${item.siren.value}" data-denomination="${item.denomination.value}">${display_result.replace(re, "<b>$1</b>")}</div>`;
@@ -76,20 +76,26 @@ function getCompanyDetailsUpdatePannelTitle(siren, denomination) {
     xhr.responseType = "json";
     xhr.onreadystatechange = function () {
         let panels = "";
-        if (xhr.readyState === 4 && xhr.status === 200) {
-            for (let [bundle, value] of Object.entries(xhr.response)) {
-
-                if ("financial_data" === bundle) { // IF IN THE DESIRED BUNDLE
-                    let l = value.length;
-                    while (l--) {
-                        for (let [code, bundle] of Object.entries(value[l])) {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                for (let [bundle, value] of Object.entries(xhr.response)) {
+                    if ("financial_data" === bundle) { // IF IN THE FINANCIAL PART
+                        for (let [code, bundle] of Object.entries(value)) {
                             let bundle_description = `${bundle["description"]} (${code} du ${bundle["account"]})`
                             panels += companyPanel(bundle_description, bundle["value"]);
                         }
+                    } else { // IN IDENTITY
+                        panels += companyPanel(value["description"], value["value"]);
                     }
-                } else { // IN IDENTITY
-                    panels += companyPanel(value["description"], value["value"]);
                 }
+            } else if (xhr.status === 404) {
+                panels += `<div class = "panel panel-default">
+              <div class = "panel-heading">
+                  <h4 class = "panel-title">
+                      Aucune donnée pour cette année
+                  </h4>
+              </div>
+          </div>`;
             }
         }
         document.getElementById("list-company").innerHTML = panels;
