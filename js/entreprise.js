@@ -1,25 +1,6 @@
 'use strict';
 
 /*******************************************************************************
- * Class inheriting DOM element, to use when there is no data to show in the
- * panel
- */
-class Nodata extends HTMLElement {
-    constructor() {
-        super();
-        this.innerHTML = `<div class = "panel panel-default">
-              <div class = "panel-heading">
-                  <h4 class = "panel-title">
-                      Aucune donnée pour cette année
-                  </h4>
-              </div>
-          </div>`;
-    }
-}
-
-customElements.define('no-data', Nodata);
-
-/*******************************************************************************
  * Class inheriting DOM element, a collapsable panel displaying the data. It
  * needs two attributes to display a coherent panel, the description of a value
  * and its value. For instance:
@@ -177,7 +158,13 @@ function getCompanyDetailsUpdatePannelTitle(siren, denomination) {
                     }
                 }
             } else if (xhr.status === 404) { // IF NO DATA FOR THIS COMPANY OR YEAR
-                panelCompany.insertAdjacentHTML(WHERE_TO_INSERT, `<no-data>`);
+                panelCompany.innerHTML = `<div class = "panel panel-default">
+              <div class = "panel-heading">
+                  <h4 class = "panel-title">
+                      Aucune donnée pour cette année
+                  </h4>
+              </div>
+          </div>`;
             }
         }
     };
