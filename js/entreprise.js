@@ -1,4 +1,89 @@
 'use strict';
+
+/*******************************************************************************
+ * Class inheriting DOM element, to use when there is no data to show in the
+ * panel
+ */
+class Nodata extends HTMLElement {
+    constructor() {
+        super();
+        this.innerHTML = `<div class = "panel panel-default">
+              <div class = "panel-heading">
+                  <h4 class = "panel-title">
+                      Aucune donnée pour cette année
+                  </h4>
+              </div>
+          </div>`;
+    }
+}
+
+customElements.define('no-data', Nodata);
+
+/*******************************************************************************
+ * Class inheriting DOM element, a collapsable panel displaying the data. It
+ * needs two attributes to display a coherent panel, the description of a value
+ * and its value. For instance:
+ * <company-panel description="SIREN" value="123456789">
+ */
+class companyPanel extends HTMLElement {
+    constructor() {
+        super(); // AN HTML DOM
+        // THE TWO ATTRIBUTES
+        const DESCRIPTION_ATTRIBUTE = "description";
+        const VALUE = "value";
+        // GET THE ATTRIBUTES OR SET A DEFAULTS VALUE
+        if (this.hasAttribute(DESCRIPTION_ATTRIBUTE)) {
+            this.description = this.getAttribute(DESCRIPTION_ATTRIBUTE);
+        } else {
+            this.description = "Aucune description de cette donnée"
+        }
+        if (this.hasAttribute(VALUE)) {
+            this.value = this.getAttribute(VALUE);
+        } else {
+            this.value = "0"
+        }
+        /***********************************************************************
+         * For a collapsable panel hrefs must link to the id. To cr  create a
+         * unique id, a hash function of the description is used.
+         **/
+        let id = this._hash
+        this.innerHTML = `<div class = "panel panel-default">
+              <div class = "panel-heading" data-toggle="collapse" href="#${id}" style="cursor:pointer;">
+                  <h4 class = "panel-title">
+                      <a data-toggle="collapse" href="#${id}">${this.description}</a>
+                  </h4>
+              </div>
+              <div id="${id}" class="panel-collapse collapse">
+                  <div class="alert alert-info">${this.value.toLocaleString("fr-FR")}</div>
+              </div>
+          </div>`;
+
+    }
+
+    /***************************************************************************
+     * Summary. Create a hash base on the description
+     *
+     * Description. Uses hash function to create a valid most likely unique id
+     * from any String. Epoch time is ms * random [0,1[ string is concatenate to
+     * the former string. Inherit from String because id attribute is one.
+     */
+    get _hash() {
+        let hash = 0;
+        const d = new Date();
+        const t = d.getTime();
+        let s = this.description;
+        //ADD TIME AND RANDOM FOR BETTER CHANCES TO HAVE A UNIQUE ID
+        s = s + String(t * Math.random())
+        for (let i = 0; i < s.length; i++) {
+            let character = s.charCodeAt(i);
+            hash = ((hash << 5) - hash) + character;
+            hash = hash & hash; // CONVERT TO 32BIT INTEGER
+        }
+        return String(Math.abs(hash))
+    }
+}
+
+customElements.define('company-panel', companyPanel);
 /*******************************************************************************
  * Event fired when changed the year or selecting average data
  */
@@ -60,104 +145,42 @@ new autoComplete({
  * https://api.enthic.fr/company/siren/. Call companyPanel with the
  * value return to create DOM.
  *
- * @param {type}    siren         SIREN of the company.
- * @param {type}    denomonation  Official registered company name.
+ * @param {String}    siren         SIREN of the company.
+ * @param {String}    denomination  Official registered company name.
  */
 function getCompanyDetailsUpdatePannelTitle(siren, denomination) {
     // CHANGE THE PANEL HEADER
     const year = document.getElementById("select-year").value;
+    const COMPANY_PANEL_DOM_ID = "panel-company-name"
     if (year === "average") {
-        document.getElementById("panel-company-name").innerText = denomination + " en moyenne";
+        document.getElementById(COMPANY_PANEL_DOM_ID).innerText = denomination + " en moyenne";
     } else {
-        document.getElementById("panel-company-name").innerText = denomination + " en " + year;
+        document.getElementById(COMPANY_PANEL_DOM_ID).innerText = denomination + " en " + year;
     }
     // HTTP POST REQUEST TO api.enthic WITH THE INPUT VALUE
     xhr.open("GET", "https://api.enthic.fr/company/siren/" + siren + "/" + year, true);
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.responseType = "json";
     xhr.onreadystatechange = function () {
-        let panels = "";
+        let panelCompany = document.getElementById("list-company");
+        const WHERE_TO_INSERT = 'beforeend'
+        panelCompany.innerHTML = "";
         if (xhr.readyState === 4) {
             if (xhr.status === 200) {
-                for (let [bundle, value] of Object.entries(xhr.response)) {
-                    if ("financial_data" === bundle) { // IF IN THE FINANCIAL PART
-                        for (let [code, bundle] of Object.entries(value)) {
-                            let bundle_description = `${bundle["description"]} (${code} du ${bundle["account"]})`
-                            panels += companyPanel(bundle_description, bundle["value"]);
+                for (let [data, value] of Object.entries(xhr.response)) {
+                    if ("financial_data" === data) { // IF IN THE FINANCIAL PART
+                        for (let [code, data] of Object.entries(value)) {
+                            let data_description = `${data["description"]} (${code} du ${data["account"]})`
+                            panelCompany.insertAdjacentHTML(WHERE_TO_INSERT, `<company-panel description="${data_description}" value="${data["value"]}">`);
                         }
                     } else { // IN IDENTITY
-                        panels += companyPanel(value["description"], value["value"]);
+                        panelCompany.insertAdjacentHTML(WHERE_TO_INSERT, `<company-panel description="${value["description"]}" value="${value["value"]}">`);
                     }
                 }
-            } else if (xhr.status === 404) {
-                panels += `<div class = "panel panel-default">
-              <div class = "panel-heading">
-                  <h4 class = "panel-title">
-                      Aucune donnée pour cette année
-                  </h4>
-              </div>
-          </div>`;
+            } else if (xhr.status === 404) { // IF NO DATA FOR THIS COMPANY OR YEAR
+                panelCompany.insertAdjacentHTML(WHERE_TO_INSERT, `<no-data>`);
             }
         }
-        document.getElementById("list-company").innerHTML = panels;
     };
     xhr.send();
-}
-
-/*******************************************************************************
- * Summary. Generate a Bootstrap panel HTML DOM for a company.
- *
- * Description. The company panel contains details about the company. It
- * uses the bootstrap library to be collapsible and save space. Value are
- * financial amount and to be converted to French local for thousand
- * separation. Inherit from String because HTML is one.
- *
- * @param {String}          bundle bundle from company details
- * @param {String, Number}  value Value from company details
- *
- * @return {Object} Object containing the DOM HTML as value.
- */
-function companyPanel(bundle, value) {
-    const uniqueId = new domId(bundle)
-    return `<div class = "panel panel-default">
-              <div class = "panel-heading" data-toggle="collapse" href = "#${uniqueId.id}" style="cursor:pointer;">
-                  <h4 class = "panel-title">
-                      <a data-toggle="collapse" href="#${uniqueId.id}">${bundle}</a>
-                  </h4>
-              </div>
-              <div id="${uniqueId.id}" class="panel-collapse collapse">
-                  <div class="alert alert-info">${value.toLocaleString("fr-FR")}</div>
-              </div>
-          </div>`;
-}
-
-/*******************************************************************************
- * Class domId
- */
-class domId extends String {
-    /***************************************************************************
-     * Summary. Generate an DOM id based on a String
-     *
-     * Description. Uses hash function to create a valid most likely unique id
-     * from any String. Epoch time is ms * random [0,1[ string is concatenate to
-     * the former string. Inherit from String because id attribute is one.
-     *
-     * @param {String}  s   String to hash.
-     *
-     * @return {Object}     Object containing the DOM id as value.
-     */
-    constructor(s) {
-        let hash = 0;
-        const d = new Date();
-        const t = d.getTime();
-        //ADD TIME AND RANDOM FOR BETTER CHANCES TO HAVE A UNIQUE ID
-        s = s + String(t * Math.random())
-        for (let i = 0; i < s.length; i++) {
-            let character = s.charCodeAt(i);
-            hash = ((hash << 5) - hash) + character;
-            hash = hash & hash; // CONVERT TO 32BIT INTEGER
-        }
-        super(hash);
-        return {"id": String(this)};
-    }
 }
