@@ -57,7 +57,6 @@ class companyPanel extends HTMLElement {
                   <div class="alert alert-info">${this.value.toLocaleString("fr-FR")}</div>
               </div>
           </div>`;
-
     }
 
     /***************************************************************************
