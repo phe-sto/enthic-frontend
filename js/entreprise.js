@@ -7,27 +7,27 @@
  * <company-panel description="SIREN" value="123456789">
  */
 class companyPanel extends HTMLElement {
+    // THE TWO ATTRIBUTES
+    static DESCRIPTION_ATTRIBUTE = "description";
+    static VALUE = "value";
     constructor() {
         super(); // AN HTML DOM
-        // THE TWO ATTRIBUTES
-        const DESCRIPTION_ATTRIBUTE = "description";
-        const VALUE = "value";
-        // GET THE ATTRIBUTES OR SET A DEFAULTS VALUE
-        if (this.hasAttribute(DESCRIPTION_ATTRIBUTE)) {
-            this.description = this.getAttribute(DESCRIPTION_ATTRIBUTE);
+        // GET THE ATTRIBUTES OR SET A DEFAULT VALUE
+        if (this.hasAttribute(companyPanel.DESCRIPTION_ATTRIBUTE)) {
+            this.description = this.getAttribute(companyPanel.DESCRIPTION_ATTRIBUTE);
         } else {
-            this.description = "Aucune description de cette donnée"
+            this.description = "Aucune description de cette donnée";
         }
-        if (this.hasAttribute(VALUE)) {
-            this.value = this.getAttribute(VALUE);
+        if (this.hasAttribute(companyPanel.VALUE)) {
+            this.value = this.getAttribute(companyPanel.VALUE);
         } else {
-            this.value = "0"
+            this.value = "0";
         }
         /***********************************************************************
          * For a collapsable panel hrefs must link to the id. To cr  create a
          * unique id, a hash function of the description is used.
          **/
-        let id = this._hash
+        let id = this.#randomId
         this.innerHTML = `<div class = "panel panel-default">
               <div class = "panel-heading" data-toggle="collapse" href="#${id}" style="cursor:pointer;">
                   <h4 class = "panel-title">
@@ -41,13 +41,13 @@ class companyPanel extends HTMLElement {
     }
 
     /***************************************************************************
-     * Summary. Create a hash base on the description
+     * Summary. Create a kind of hash base on the description
      *
      * Description. Uses hash function to create a valid most likely unique id
      * from any String. Epoch time is ms * random [0,1[ string is concatenate to
      * the former string. Inherit from String because id attribute is one.
      */
-    get _hash() {
+    get #randomId() {
         let hash = 0;
         const d = new Date();
         const t = d.getTime();
